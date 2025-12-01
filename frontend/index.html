@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>River Flood Prediction System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-water"></i>
+                    <h1>River Flood Prediction</h1>
+                </div>
+                <div class="api-status" id="apiStatus">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText">Checking API...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Prediction Form -->
+            <section class="prediction-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-calculator"></i> Flood Risk Assessment</h2>
+                    <p>Enter environmental and geographical data to predict flood risk</p>
+                </div>
+
+                <form id="predictionForm" class="prediction-form">
+                    <div class="form-grid">
+                        <!-- Location Data -->
+                        <div class="form-group">
+                            <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                            <div class="input-group">
+                                <label for="latitude">Latitude</label>
+                                <input type="number" id="latitude" name="latitude" step="0.0001" min="-90" max="90" required>
+                                <small>Range: -90 to 90</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="longitude">Longitude</label>
+                                <input type="number" id="longitude" name="longitude" step="0.0001" min="-180" max="180" required>
+                                <small>Range: -180 to 180</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="elevation">Elevation (meters)</label>
+                                <input type="number" id="elevation" name="elevation" min="0" max="10000" required>
+                                <small>Range: 0 to 10,000 meters</small>
+                            </div>
+                        </div>
+
+                        <!-- Weather Data -->
+                        <div class="form-group">
+                            <h3><i class="fas fa-cloud-rain"></i> Weather Conditions</h3>
+                            <div class="input-group">
+                                <label for="rainfall">Rainfall (mm)</label>
+                                <input type="number" id="rainfall" name="rainfall" min="0" max="1000" step="0.1" required>
+                                <small>Range: 0 to 1,000 mm</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="temperature">Temperature (°C)</label>
+                                <input type="number" id="temperature" name="temperature" min="-50" max="60" step="0.1" required>
+                                <small>Range: -50 to 60°C</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="humidity">Humidity (%)</label>
+                                <input type="number" id="humidity" name="humidity" min="0" max="100" step="0.1" required>
+                                <small>Range: 0 to 100%</small>
+                            </div>
+                        </div>
+
+                        <!-- Water Data -->
+                        <div class="form-group">
+                            <h3><i class="fas fa-tint"></i> Water Conditions</h3>
+                            <div class="input-group">
+                                <label for="river_discharge">River Discharge (m³/s)</label>
+                                <input type="number" id="river_discharge" name="river_discharge" min="0" max="10000" step="0.1" required>
+                                <small>Range: 0 to 10,000 m³/s</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="water_level">Water Level (meters)</label>
+                                <input type="number" id="water_level" name="water_level" min="0" max="50" step="0.1" required>
+                                <small>Range: 0 to 50 meters</small>
+                            </div>
+                        </div>
+
+                        <!-- Environmental Data -->
+                        <div class="form-group">
+                            <h3><i class="fas fa-leaf"></i> Environmental Factors</h3>
+                            <div class="input-group">
+                                <label for="land_cover">Land Cover Type</label>
+                                <select id="land_cover" name="land_cover" required>
+                                    <option value="">Select land cover type</option>
+                                    <option value="Water Body">Water Body</option>
+                                    <option value="Forest">Forest</option>
+                                    <option value="Agricultural">Agricultural</option>
+                                    <option value="Desert">Desert</option>
+                                    <option value="Urban">Urban</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="soil_type">Soil Type</label>
+                                <select id="soil_type" name="soil_type" required>
+                                    <option value="">Select soil type</option>
+                                    <option value="Clay">Clay</option>
+                                    <option value="Peat">Peat</option>
+                                    <option value="Loam">Loam</option>
+                                    <option value="Sandy">Sandy</option>
+                                    <option value="Silt">Silt</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Socio-economic Data -->
+                        <div class="form-group">
+                            <h3><i class="fas fa-users"></i> Socio-economic Factors</h3>
+                            <div class="input-group">
+                                <label for="population_density">Population Density</label>
+                                <input type="number" id="population_density" name="population_density" min="0" max="50000" step="0.1" required>
+                                <small>Range: 0 to 50,000</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="infrastructure">Infrastructure Presence</label>
+                                <select id="infrastructure" name="infrastructure" required>
+                                    <option value="">Select infrastructure status</option>
+                                    <option value="0">No Infrastructure</option>
+                                    <option value="1">Infrastructure Present</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="historical_floods">Historical Floods</label>
+                                <select id="historical_floods" name="historical_floods" required>
+                                    <option value="">Select flood history</option>
+                                    <option value="0">No Historical Floods</option>
+                                    <option value="1">Historical Floods Present</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="fillSampleData" class="btn btn-secondary">
+                            <i class="fas fa-flask"></i> Fill Sample Data
+                        </button>
+                        <button type="submit" id="predictBtn" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Predict Flood Risk
+                        </button>
+                        <button type="button" id="clearForm" class="btn btn-outline">
+                            <i class="fas fa-trash"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> Prediction Results</h2>
+                </div>
+                
+                <div class="results-container">
+                    <div class="prediction-card" id="predictionCard">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Information -->
+            <section class="info-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-info-circle"></i> System Information</h2>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-brain"></i> Model Information</h3>
+                        <div id="modelInfo">
+                            <p>Loading model information...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-cogs"></i> API Status</h3>
+                        <div id="apiInfo">
+                            <p>Loading API information...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 River Flood Prediction System. Built for educational purposes.</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing prediction...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
